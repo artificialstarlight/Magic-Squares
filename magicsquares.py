@@ -89,9 +89,6 @@ def generate_square():
     b = prog2[0]
     f = prog2[2]
     g = prog2[1]
-
-    midpoint = (d+f)/2
-    e = midpoint
     
     matrix = [
               [a,b,c],
