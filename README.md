@@ -15,7 +15,7 @@ the elusive 3x3 magic square of perfect squares.
 
 - Determine if two values are shared between the row and columns.
 
-- If so, generate two arithmetic progressions or square numbers.
+- If so, generate two arithmetic progressions of square numbers.
 
 - Plug these progressions into the magic square matrix, and solve for the diagonals.
 
