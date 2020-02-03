@@ -23,7 +23,7 @@ the elusive 3x3 magic square of perfect squares.
   
 - Slow
 
-- Generates a new triangle every time 
+- ~~Generates a new triangle every time~~ FIXED
 
 - Only finds two arithmetic progressions for every compatible number when more can be found
 
