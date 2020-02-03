@@ -19,4 +19,18 @@ the elusive 3x3 magic square of perfect squares.
 
 - Plug these progressions into the magic square matrix, and solve for the diagonals.
 
+# Problems:
+  
+- Slow
 
+- Generates a new triangle every time 
+
+- Only finds two arithmetic progressions for every compatible number when more can be found
+
+- Only uses two arithmetic progressions to generate a square, and doesn't rearrange the progressions to try new
+combinations
+
+- Chooses a random number each time, doesn't have a list saved of random numbers known to not work
+
+
+I will work on fixing the above problems....
