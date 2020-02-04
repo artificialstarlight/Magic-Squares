@@ -17,7 +17,7 @@ the elusive 3x3 magic square of perfect squares.
 
 - If so, generate two arithmetic progressions of square numbers.
 
-- Plug these progressions into the magic square matrix, and solve for the diagonals.
+- Plug these progressions into the magic square matrix, and solve for the diagonals
 
 # Problems:
   
@@ -30,7 +30,14 @@ the elusive 3x3 magic square of perfect squares.
 - Only uses two arithmetic progressions to generate a square, and doesn't rearrange the progressions to try new
 combinations
 
-- Chooses a random number each time, doesn't have a list saved of random numbers known to not work
+- ~~Chooses a random number each time, doesn't have a list saved of random numbers known to not work~~ FIXED
 
 
 I will work on fixing the above problems....
+
+
+# If you want to use this yourself:
+
+Have Python 3 installed on your system, and make sure you have the json module installed.
+Create a file, anywhere, and place the .py and two .json files in there.
+Run the .py file
