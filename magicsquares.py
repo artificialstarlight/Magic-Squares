@@ -1,7 +1,10 @@
+#Look, I know global variables are bad practice.
+#I'll fix it later..maybe.
+#At least it works.
+
 import random
 import math
 import json
-
 
 #creates a triangle of square differences and saves it to a file
 def generate_triangle():
@@ -22,7 +25,7 @@ def load_previous():
         otherlist = json.load(file)
 
 #saves the list of numbers that don't generate arithmetic progressions
-    #(bad numbers) to a file
+#(bad numbers) to a file
 def save_badnums():
     with open("badnums.json","w") as file1:
         json.dump(badnums,file1)
@@ -48,7 +51,6 @@ def searchtriangle(badnums):
     num1 = []
     num2 = []
     randnum = 0
-    
     #picks a random number from the list
     #makes sure it's not a "bad number"
     #Take repeats out of badnums list
@@ -120,7 +122,9 @@ def generate_square():
     b = prog2[0]
     f = prog2[2]
     g = prog2[1]
-    
+
+    e = (d+f)/2
+
     matrix = [
               [a,b,c],
               [d,e,f],
@@ -129,7 +133,10 @@ def generate_square():
     #multiply everything by 4 so everything's an int
     matrix = [[int(j*4)for j in i] for i in matrix]
     #Now solve for the diagonals
-    Sum = 0
+    Sum = matrix[1][0]+matrix[1][1]+matrix[1][2]
+    matrix[0][0] = Sum - matrix[0][1] - matrix[0][2]
+    matrix[2][2] = Sum - matrix[2][1] - matrix[2][0]
+    """Sum = 0
     for i in range(0, 3):  
         for j in range(0, 3):  
             Sum += matrix[i][j]  
@@ -139,9 +146,34 @@ def generate_square():
         rowSum = 0
         for j in range(0, 3):  
             rowSum += matrix[i][j]  
-        matrix[i][i] = Sum - rowSum
+        matrix[i][i] = Sum - rowSum"""
+    
     return matrix
 
+def generate_square2():
+    a = 0
+    b = 0
+    c = 0
+    d = 0
+    e = 0
+    f = 0
+    g = 0
+    h = 0
+    i = 0
+
+    c = prog1[1]
+    d = prog1[0]
+    h = prog1[2]
+    i = prog2[0]
+    a = prog2[2]
+    e = prog2[1]
+    
+    matrix = [
+              [a,b,c],
+              [d,e,f],
+              [g,h,i]
+                         ]
+    #WORKING ON THIS
 #Prints it out   
 def print_square(matrix):
     for i in range(0, 3):  
