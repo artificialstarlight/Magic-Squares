@@ -1,7 +1,7 @@
 # Magic-Squares
 A python 3 program to generate magic squares with square numbers in them. 
 
-This program finds 3x3 magic squares with perfect square numbers in them, in hopes of finding
+This program finds 3x3 magic squares with at least 6 perfect square numbers in them, in hopes of finding
 the elusive 3x3 magic square of perfect squares. 
 
 # The algorithm:
