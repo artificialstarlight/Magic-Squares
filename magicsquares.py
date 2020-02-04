@@ -198,7 +198,6 @@ def choose_options():
     global choice1
     print("Do you want to generate a new triangle of square differences")
     print("to search from, or use previous one?")
-    print("Choose 1 if you have not ran this program before.")
     print("1. Generate new    2. Load previous")
     choice = input(">>> ")
 
