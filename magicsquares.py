@@ -1,6 +1,5 @@
 #Look, I know global variables are bad practice.
-#I'll fix it later..maybe.
-#At least it works.
+#I'll fix it later...
 
 import random
 import math
