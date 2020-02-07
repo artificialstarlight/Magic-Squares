@@ -50,8 +50,8 @@ def searchtriangle(badnums):
     cols = []
     num1 = []
     num2 = []
-    randnum = 138600
-    #randnum = 0
+    #randnum = 138600
+    randnum = 0
     #picks a random number from the list
     #makes sure it's not a "bad number"
     #Take repeats out of badnums list
@@ -95,7 +95,7 @@ def find_progression(prog1,prog2):
                             return prog1,prog2
    #If there's no progressions found, append the number chosen to
     #the "bad numbers" list, and return false
-   if prog1 == [] and prog2 ==[]:
+   if prog1 == [] or prog2 ==[]:
       badnums.append(randnum)
       return emptytup
 
@@ -238,8 +238,10 @@ def main():
         if tup != tuple():
             prog1 = tup[0]
             prog2 = tup[1]
+            prog1,prog2 = find_progression(prog1,prog2)
+            print()
             print("Arithmetic progressions found:")
-            print(find_progression(prog1,prog2))
+            print(prog1,prog2)
             print()
             print("---------------------------------------")
             print()
