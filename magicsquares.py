@@ -1,5 +1,6 @@
 #Look, I know global variables are bad practice.
-#I'll fix it later...
+#I'll fix it later..maybe.
+#At least it works.
 
 import random
 import math
@@ -25,6 +26,7 @@ def load_previous():
 
 #saves the list of numbers that don't generate arithmetic progressions
 #(bad numbers) to a file
+#bad and naughty numbers get put in the badnums list
 def save_badnums():
     with open("badnums.json","w") as file1:
         json.dump(badnums,file1)
@@ -34,7 +36,7 @@ def save_badnums():
 def load_badnums():
     global badnums
     with open("badnums.json") as file1:
-        badnums = json.load(file1)
+        badnums = (json.load(file1))
     return badnums
 
 #searches the triangle for numbers that generate arithmetic progressions  
@@ -44,20 +46,18 @@ def searchtriangle(badnums):
     global num1
     global num2
     global randnum
-    global count
     rows = []
     cols = []
     num1 = []
     num2 = []
-    randnum = 0
+    randnum = 138600
+    #randnum = 0
     #picks a random number from the list
     #makes sure it's not a "bad number"
     #Take repeats out of badnums list
     badnums = list(dict.fromkeys(badnums))
     while randnum in badnums:
         randnum = random.choice(otherlist)
-    #determines how many times it is in the list
-    count = otherlist.count(randnum)
     #determines the row, column of the number
     #as well as the two numbers subtracted at that point to get that number
     for i, x in enumerate(otherlist):
@@ -75,12 +75,9 @@ def searchtriangle(badnums):
             num2.append(num_2)
 
 #Finds arithmetic progressions..
-def find_progression():
-   global prog1
-   global prog2
+def find_progression(prog1,prog2):
    x = 0
-   prog1 = []
-   prog2  = []
+   emptytup = tuple()
    for i in rows:
        for k in range(len(rows)):
             for j in cols:
@@ -95,15 +92,15 @@ def find_progression():
                         elif p3-p2 == p2-p1 and x == 1:
                             x = x+1
                             prog2 = [p1,p2,p3]
-                            return True
+                            return prog1,prog2
    #If there's no progressions found, append the number chosen to
     #the "bad numbers" list, and return false
    if prog1 == [] and prog2 ==[]:
-       badnums.append(randnum)
-       return False
+      badnums.append(randnum)
+      return emptytup
 
 #Generates a square using the arithmetic progressions.
-def generate_square():
+def generate_square(prog1,prog2):
     global matrix
     a = 0
     b = 0
@@ -135,21 +132,11 @@ def generate_square():
     Sum = matrix[1][0]+matrix[1][1]+matrix[1][2]
     matrix[0][0] = Sum - matrix[0][1] - matrix[0][2]
     matrix[2][2] = Sum - matrix[2][1] - matrix[2][0]
-    """Sum = 0
-    for i in range(0, 3):  
-        for j in range(0, 3):  
-            Sum += matrix[i][j]  
-    Sum = Sum//2
-  
-    for i in range(0, 3):  
-        rowSum = 0
-        for j in range(0, 3):  
-            rowSum += matrix[i][j]  
-        matrix[i][i] = Sum - rowSum"""
-    
     return matrix
 
-def generate_square2():
+#generate another square
+def generate_square2(prog1,prog2):
+    global matrix2
     a = 0
     b = 0
     c = 0
@@ -167,12 +154,16 @@ def generate_square2():
     a = prog2[2]
     e = prog2[1]
     
-    matrix = [
+    matrix2 = [
               [a,b,c],
               [d,e,f],
               [g,h,i]
                          ]
-    #WORKING ON THIS
+    Sum = matrix2[0][0]+matrix2[1][1]+matrix2[2][2]
+    matrix2[0][1] = Sum - matrix2[0][0]-matrix2[0][2]
+    matrix2[1][2] = Sum - matrix2[1][1] - matrix2[1][0]
+    matrix2[2][0] = Sum - matrix2[2][1] - matrix2[2][2]
+    return matrix2
 #Prints it out   
 def print_square(matrix):
     for i in range(0, 3):  
@@ -240,28 +231,36 @@ def main():
         generate_triangle()
     else:
         load_previous()
-    badnums = load_badnums()
+    load_badnums()
     while square == False:
         searchtriangle(badnums)
-        if find_progression() == True:
-            find_progression()
-            print()
+        tup = find_progression([],[])
+        if tup != (0,0):
+            prog1 = tup[0]
+            prog2 = tup[1]
             print("Arithmetic progressions found:")
-            print(prog1)
-            print(prog2)
+            print(find_progression(prog1,prog2))
             print()
             print("---------------------------------------")
             print()
-            print_square(generate_square())
+            print_square(generate_square(prog1,prog2))
             print()
             print("How many are squares?")
             print()
-            howmanysquare(generate_square())
+            howmanysquare(generate_square(prog1,prog2))
             print()
             print("Is it magic?")
             print(is_magic(matrix))
+            print()
+            print_square(generate_square2(prog1,prog2))
+            print()
+            print("How many are squares?")
+            print()
+            howmanysquare(generate_square2(prog1,prog2))
+            print()
+            print("Is it magic?")
+            print(is_magic(matrix2))
             square = True
             save_badnums()
-            
 #I'll add the if name == main stuff later
 main()
