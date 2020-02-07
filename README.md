@@ -27,8 +27,7 @@ the elusive 3x3 magic square of perfect squares.
 
 - Only finds two arithmetic progressions for every compatible number when more can be found
 
-- Only uses two arithmetic progressions to generate a square, and doesn't rearrange the progressions to try new
-combinations
+- ~~doesn't rearrange the progressions to try new combinations~~ FIXED
 
 - ~~Chooses a random number each time, doesn't have a list saved of random numbers known to not work~~ FIXED
 
