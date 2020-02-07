@@ -235,7 +235,7 @@ def main():
     while square == False:
         searchtriangle(badnums)
         tup = find_progression([],[])
-        if tup != (0,0):
+        if tup != tuple():
             prog1 = tup[0]
             prog2 = tup[1]
             print("Arithmetic progressions found:")
