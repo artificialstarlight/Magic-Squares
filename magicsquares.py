@@ -1,29 +1,23 @@
-#Look, I know global variables are bad practice.
-#I'll fix it later..maybe.
-#At least it works.
+#I'll fix the global variables later..I know.
 
 import random
 import math
 import json
 
-#creates a triangle of square differences and saves it to a file
+#generates a triangle of square differences
 def generate_triangle():
-    global otherlist
-    mylistofnumbers = list(range(1,1000))
+    global triangleslice
+    global mylistsquared
+    mylistofnumbers = list(range(1,2000))
     mylistsquared = [i**2 for i in mylistofnumbers]
-    otherlist = []
+    triangle = []
     for j in range(len(mylistsquared)-1):
         for k in range(j):
-            otherlist.append(mylistsquared[j] - mylistsquared[k])
-    with open("triangle.json","w") as file:
-        json.dump(otherlist, file)
+            triangle.append(mylistsquared[j] - mylistsquared[k])
+    triangleslice = triangle[len(triangle)//2:]
 
-#loads the previous triangle instead of creating a new one
-def load_previous():
-    global otherlist
-    with open("triangle.json","r") as file:
-        otherlist = json.load(file)
 
+    
 #saves the list of numbers that don't generate arithmetic progressions
 #(bad numbers) to a file
 #bad and naughty numbers get put in the badnums list
@@ -35,59 +29,64 @@ def save_badnums():
 #loads the "bad numbers"
 def load_badnums():
     global badnums
-    with open("badnums.json") as file1:
-        badnums = (json.load(file1))
+    with open("badnums.json","r") as file1:
+        badnums = json.load(file1)
     return badnums
 
-#searches the triangle for numbers that generate arithmetic progressions  
+#Saves the numbers whose progressions only generate a square of six squares.
+def save_sixsquares():
+    with open("sixsquares.json","w") as file2:
+        json.dump(sixsquares,file2)
+        
+#Loads what's mentioned in the previous comment.
+def load_sixsquares():
+    global sixsquares
+    with open("sixsquares.json","r") as file2:
+        sixsquares = json.load(file2)
+    return sixsquares
+
+#searches the triangle slice for numbers that generate arithmetic progressions  
 def searchtriangle(badnums):
-    global rows
-    global cols
-    global num1
-    global num2
     global randnum
+    global count
     rows = []
     cols = []
-    num1 = []
-    num2 = []
+    #randnum = 3360
     #randnum = 138600
     randnum = 0
+    #Take repeats out of badnums list
+    badnums = list(set(badnums))
     #picks a random number from the list
     #makes sure it's not a "bad number"
-    #Take repeats out of badnums list
-    badnums = list(dict.fromkeys(badnums))
     while randnum in badnums:
-        randnum = random.choice(otherlist)
-    #determines the row, column of the number
-    #as well as the two numbers subtracted at that point to get that number
-    for i, x in enumerate(otherlist):
-        if x == randnum:
-            i = i+1
-            row = (int(math.sqrt(i*8)-1))//2
-            col = i - (row*(row+1))//2-1
-            col1 = col+1
-            row2 = row+2
-            num_1 = row2*row2
-            num_2 = col1*col1
-            rows.append(row2)
-            cols.append(col1)
-            num1.append(num_1)
-            num2.append(num_2)
+        randnum = random.choice(triangleslice)
+    #Determines how many times it's in the list
+    count = triangleslice.count(randnum)
+    #find the two numbers subtracted to give you randnum at each occurrence
+    for n in mylistsquared:
+        for m in mylistsquared:
+            if m - n == randnum:
+                rows.append(m)
+                cols.append(n)
+    return rows,cols
 
 #Finds arithmetic progressions..
-def find_progression(prog1,prog2):
+def find_progression(rows,cols):
    x = 0
+   prog1 = []
+   prog2 = []
    emptytup = tuple()
-   for i in rows:
-       for k in range(len(rows)):
-            for j in cols:
-                for l in range(len(cols)):
-                    if i == j:
-                        p1 = num2[k-1]
-                        p2 = num2[l-1]
-                        p3 = num1[l-1]
+   for r in rows:
+       for l1 in range(len(rows)):
+            for c in cols:
+                for l2 in range(len(cols)):
+                    #if row shares a value with a column:
+                   if math.sqrt(r) == math.sqrt(c):
+                        p1 = cols[l1-1]
+                        p2 = cols[l2-1]
+                        p3 = rows[l2-1]
                         if p3 - p2 == p2 - p1 and x == 0:
-                            x = x + 1
+                            x = x+1
                             prog1 = [p1,p2,p3]
                         elif p3-p2 == p2-p1 and x == 1:
                             x = x+1
@@ -95,7 +94,7 @@ def find_progression(prog1,prog2):
                             return prog1,prog2
    #If there's no progressions found, append the number chosen to
     #the "bad numbers" list, and return false
-   if prog1 == [] or prog2 ==[]:
+   if len(prog1) < 3 or len(prog2) < 3:
       badnums.append(randnum)
       return emptytup
 
@@ -135,6 +134,7 @@ def generate_square(prog1,prog2):
     return matrix
 
 #generate another square
+#rearrange the progressions
 def generate_square2(prog1,prog2):
     global matrix2
     a = 0
@@ -164,6 +164,7 @@ def generate_square2(prog1,prog2):
     matrix2[1][2] = Sum - matrix2[1][1] - matrix2[1][0]
     matrix2[2][0] = Sum - matrix2[2][1] - matrix2[2][2]
     return matrix2
+
 #Prints it out   
 def print_square(matrix):
     for i in range(0, 3):  
@@ -189,6 +190,15 @@ def howmanysquare(matrix):
             print(is_square(j), end=' ')
         print()
         
+#same as above, doesn't print anything tho 
+def howmanysquarenoprint(matrix):
+    numtrue = 0
+    for i in matrix:
+        for j in i:
+            if is_square(j):
+                numtrue = numtrue + 1
+    return numtrue
+
 #Checks to see if it's a magic square 
 def is_magic(mat):
     N = 3
@@ -214,36 +224,25 @@ def is_magic(mat):
             return False
     return True
 
-#Some user-friendliness
-def choose_options():
-    global choice
-    global choice1
-    print("Do you want to generate a new triangle of square differences")
-    print("to search from, or use previous one?")
-    print("1. Generate new    2. Load previous")
-    choice = input(">>> ")
-
 #here's the main.
 def main():
     square = False
-    choose_options()
-    if int(choice) == 1:
-        generate_triangle()
-    else:
-        load_previous()
+    generate_triangle()
     load_badnums()
+    load_sixsquares()
     while square == False:
-        searchtriangle(badnums)
-        tup = find_progression([],[])
+        rows,cols = searchtriangle(badnums)
+        tup = find_progression(rows,cols)
         if tup != tuple():
             prog1 = tup[0]
             prog2 = tup[1]
-            prog1,prog2 = find_progression(prog1,prog2)
+            prog1,prog2 = find_progression(rows,cols)
             print()
             print("Arithmetic progressions found:")
             print(prog1,prog2)
             print()
             print("---------------------------------------")
+            print()
             print()
             print_square(generate_square(prog1,prog2))
             print()
@@ -262,7 +261,10 @@ def main():
             print()
             print("Is it magic?")
             print(is_magic(matrix2))
+            if howmanysquarenoprint(matrix) <= 6 and howmanysquarenoprint(matrix2) <=6:
+                sixsquares.append(randnum)
             square = True
             save_badnums()
+            save_sixsquares()
 #I'll add the if name == main stuff later
 main()
