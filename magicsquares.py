@@ -33,18 +33,6 @@ def load_badnums():
         badnums = json.load(file1)
     return badnums
 
-#Saves the numbers whose progressions only generate a square of six squares.
-def save_sixsquares():
-    with open("sixsquares.json","w") as file2:
-        json.dump(sixsquares,file2)
-        
-#Loads what's mentioned in the previous comment.
-def load_sixsquares():
-    global sixsquares
-    with open("sixsquares.json","r") as file2:
-        sixsquares = json.load(file2)
-    return sixsquares
-
 #searches the triangle slice for numbers that generate arithmetic progressions  
 def searchtriangle(badnums):
     global randnum
@@ -229,7 +217,6 @@ def main():
     square = False
     generate_triangle()
     load_badnums()
-    load_sixsquares()
     while square == False:
         rows,cols = searchtriangle(badnums)
         tup = find_progression(rows,cols)
@@ -261,10 +248,7 @@ def main():
             print()
             print("Is it magic?")
             print(is_magic(matrix2))
-            if howmanysquarenoprint(matrix) <= 6 and howmanysquarenoprint(matrix2) <=6:
-                sixsquares.append(randnum)
             square = True
             save_badnums()
-            save_sixsquares()
 #I'll add the if name == main stuff later
 main()
